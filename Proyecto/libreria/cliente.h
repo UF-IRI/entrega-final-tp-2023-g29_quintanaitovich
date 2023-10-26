@@ -1,7 +1,9 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
+
 #include <string.h>
 #include <iostream>
+#include "clases.h"
 
 using namespace std;
 
@@ -21,16 +23,25 @@ struct cliente
     sFecha fecha;
     int estado;
 };
-typedef struct cliente sCliente;
+typedef struct cliente sClientes;
 
-struct gym
+//guarda todas las clases que tiene un cliente
+struct inscripcion
 {
-    sCliente* Clientes;
-    int CantClientes;
+    int idClase;
+    int fechaInscripcion; //como se declara si es un timestamp
 };
+typedef struct inscripcion sInscripcion;
 
-typedef struct gym sGym;
+//va guardando los clientes que se anotan en cada clase
+struct asistencia
+{
+    int idCliente;
+    int cantInscriptos;
+    sInscripcion Inscripcion;
+};
+typedef struct asistencia sAsistencia;
 
-int buscar_id(sCliente *cliente, string nombre, string apellido);
+int buscar_idcliente(sClientes *cliente, string nombre, string apellido);
 
 #endif // CLIENTE_H

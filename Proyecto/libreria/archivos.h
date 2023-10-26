@@ -9,8 +9,8 @@ enum Archivos { ErrorApertura = -1,  ExitoOperacion = 1, ErrorEscritura= -2 };
 
 typedef enum Archivos eArchivos;
 
-eArchivos leerArchivoClientes (std::fstream *archivo, sCliente *clientes);
-eArchivos escribirArchivoClientes (std::fstream *archivo, sCliente *clientes);
+eArchivos leerArchivoClientes (std::fstream *archivo, sClientes *clientes);
+eArchivos escribirArchivoClientes (std::fstream *archivo, sClientes *clientes);
 eArchivos leerArchivoClases (std::fstream *archivo, sClases *clases);
 eArchivos escribirArchivoGrupos (std::fstream* archivo, sClases* clases, int cantidad_clases);
 

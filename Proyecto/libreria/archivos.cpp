@@ -7,7 +7,7 @@
 
 using namespace std;
 
-eArchivos leerArchivoClientes(std::fstream *archivo, sCliente *clientes)
+eArchivos leerArchivoClientes(std::fstream *archivo, sClientes *clientes)
 {
     unsigned int auxId;
     std::string auxNombre;
