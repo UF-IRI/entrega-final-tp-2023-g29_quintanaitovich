@@ -1,5 +1,5 @@
 #include "cliente.h"
-#include "clases.h"
+#include "clasess.h"
 #include <iostream>
 
 using namespace std;

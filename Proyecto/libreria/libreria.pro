@@ -9,13 +9,13 @@ CONFIG += c++17
 
 SOURCES += \
     archivos.cpp \
-    clases.cpp \
+    clasess.cpp \
     cliente.cpp \
     libreria.cpp
 
 HEADERS += \
     archivos.h \
-    clases.h \
+    clasess.h \
     cliente.h \
     libreria_global.h \
     libreria.h

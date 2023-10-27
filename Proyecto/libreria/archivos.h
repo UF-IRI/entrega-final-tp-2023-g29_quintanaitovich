@@ -1,7 +1,7 @@
 #ifndef ARCHIVOS_H
 #define ARCHIVOS_H
 #include "cliente.h"
-#include "clases.h"
+#include "clasess.h"
 #include <string.h>
 #include <fstream>
 

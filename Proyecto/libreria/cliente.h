@@ -38,9 +38,9 @@ struct asistencia
 {
     int idCliente;
     int cantInscriptos;
-    sInscripcion Inscripcion [60];
+    sInscripcion Inscripcion [60]; // se puede hacer asi?
 };
-typedef struct asistencia sAsistencia;
+typedef struct asistencia sAsistencias;
 
 const sInscripcion InscripcionNula = { 0 , 0 };
 int buscar_idcliente(sClientes *cliente, string nombre, string apellido);
