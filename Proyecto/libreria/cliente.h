@@ -38,10 +38,11 @@ struct asistencia
 {
     int idCliente;
     int cantInscriptos;
-    sInscripcion Inscripcion;
+    sInscripcion Inscripcion [60];
 };
 typedef struct asistencia sAsistencia;
 
+const sInscripcion InscripcionNula = { 0 , 0 };
 int buscar_idcliente(sClientes *cliente, string nombre, string apellido);
 
 #endif // CLIENTE_H

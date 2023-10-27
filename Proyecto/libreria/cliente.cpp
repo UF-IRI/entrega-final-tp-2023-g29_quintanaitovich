@@ -7,13 +7,13 @@ using namespace std;
 int buscar_idcliente(sClientes *cliente, string nombre, string apellido)
 {
     int i=0;
-    sClientes* actual = cliente;
+    sClientes* Actual = cliente;
     sClientes* Ultimo = cliente + 249;
-    while(actual != Ultimo)
+    while(Actual != Ultimo)
     {
-        if(actual->nombre==nombre && actual->apellido==apellido)
+        if(Actual->nombre==nombre && Actual->apellido==apellido)
         {
-            return actual->id;
+            return Actual->id;
         }
     }
     return -1;
