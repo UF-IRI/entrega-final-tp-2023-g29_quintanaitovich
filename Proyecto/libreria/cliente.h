@@ -7,11 +7,11 @@
 
 using namespace std;
 
-struct fecha
+/*struct fecha
 {
     int dia,mes,anyo;
 };
-typedef struct fecha sFecha;
+typedef struct fecha sFecha;*/
 
 struct cliente
 {
@@ -20,7 +20,7 @@ struct cliente
     std::string apellido;
     std::string email;
     std::string telefono;
-    sFecha fecha;
+    std::string fecha;
     int estado;
 };
 typedef struct cliente sClientes;
@@ -38,11 +38,13 @@ struct asistencia
 {
     int idCliente;
     int cantInscriptos;
-    sInscripcion Inscripcion [60]; // se puede hacer asi?
+    sInscripcion *Inscripcion=new sInscripcion[cantInscriptos];
 };
 typedef struct asistencia sAsistencias;
 
 const sInscripcion InscripcionNula = { 0 , 0 };
-int buscar_idcliente(sClientes *cliente, string nombre, string apellido);
+
+int buscar_idcliente(sClientes *cliente, unsigned int cant, string nombre, string apellido);
+
 
 #endif // CLIENTE_H
