@@ -7,7 +7,7 @@
 using namespace std;
 
 eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, unsigned int tamT,sAsistencias*asistencia,
-                        unsigned int tam, string actividad, float horario, string nombre, string apellido, string email )
+                        unsigned int tam, string actividad, float horario, string nombre, string apellido)
 {
     int poscliente;
     int IdClase = buscar_idclases(clases,tamT,actividad,horario);
@@ -15,7 +15,7 @@ eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, 
     unsigned int n=0;
     int*grupitos=nullptr;
 
-    int idCliente = buscar_idcliente(cliente, cant,nombre,apellido,email);
+    int idCliente = buscar_idcliente(cliente, cant,nombre,apellido);
     if(idCliente == -1)
         return eReserva::ErrorReserva;
 
@@ -129,7 +129,7 @@ int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float 
     //cuando llamo a la funcion aclarar que -1 es error.
 }
 
-void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario)
+void AgruparPorHorarios(sClases*clases, int tamT, int*& grupitos, unsigned int &n, float horario)
 {
     //recorrer las clases y buscar todas las que coincida el horario con horario
     for(int i=0; i<tamT; i++)
@@ -162,13 +162,13 @@ void ResizeGrupitos(int*& grupitos, unsigned int &N)
     grupitos=aux;
 }
 
-void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, string &apellidito, string &emailcito,
+void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, string &apellidito,
                    string &actividadd, float &horarioo)
 {
     int num_cliente=rand()%(sizeof(clientes));
     nombrecito=clientes[num_cliente].nombre;
     apellidito=clientes[num_cliente].nombre;
-    emailcito=clientes[num_cliente].nombre;
+    //emailcito=clientes[num_cliente].nombre;
 
     int num_clase=rand()%(sizeof(clases));
     actividadd=clases[num_clase].actividad;

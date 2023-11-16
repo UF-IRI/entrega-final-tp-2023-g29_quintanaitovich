@@ -128,7 +128,7 @@ eArchivos leerArchivoClases (std::ifstream &archivo, sClases *& clases, unsigned
 
         resizeClases(clases,tamT);
 
-        clases[tamT-1].id=  std::stoi(sidclase);
+        clases[tamT-1].id= std::stoi(sidclase);
         clases[tamT-1].actividad=snombre;
         clases[tamT-1].horario= std::stof(shorario);
     }

@@ -39,7 +39,7 @@ int main()
     //hago el random de mi lista de clientes [una posicion]
     //hago un random que me diga la cantidad de clientes que se van a anotar hoy
     int CantidadClientesHoy= rand()%(cant);
-    string nombrecito=" ", apellidito=" ", emailcito=" ", actividadd=" ";
+    string nombrecito=" ", apellidito=" ", actividadd=" ";
     float horarioo=0.0;
     sAsistencias*asistenciasMañana= new sAsistencias[CantidadClientesHoy];
     int Reserva=0;
@@ -48,10 +48,10 @@ int main()
     while(i<CantidadClientesHoy)
     {
         unsigned int j=0;
-        clienteRandom (ClientesGYM, ClasesGYM, nombrecito, apellidito, emailcito, actividadd, horarioo);
-        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tam, actividadd, horarioo, nombrecito, apellidito ,emailcito);
+        clienteRandom (ClientesGYM, ClasesGYM, nombrecito, apellidito, actividadd, horarioo);
+        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tam, actividadd, horarioo, nombrecito, apellidito);
         int idclaseR= buscar_idclases(ClasesGYM,tamT,actividadd,horarioo);
-        int idclienteR=buscar_idcliente(ClientesGYM,cant,nombrecito,apellidito,emailcito);
+        int idclienteR=buscar_idcliente(ClientesGYM,cant,nombrecito,apellidito);
 
         if(Reserva>0)
         {
@@ -64,7 +64,6 @@ int main()
                     int cantidad= (asistenciasMañana[j].cantInscriptos)++;
                     //asistenciasMañana[j].cantInscriptos= cantidad;
                     asistenciasMañana[j].Inscripcion[cantidad] = {idclaseR, time(NULL)};
-
                 }
                 else
                 {

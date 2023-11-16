@@ -38,6 +38,6 @@ typedef struct asistencia sAsistencias;
 
 const sInscripcion InscripcionNula = { 0 , 0 };
 
-int buscar_idcliente (sClientes *cliente,unsigned int tamT, string nombre, string apellido, string email);
+int buscar_idcliente (sClientes *cliente,unsigned int tamT, string nombre, string apellido);
 
 #endif // CLIENTE_H

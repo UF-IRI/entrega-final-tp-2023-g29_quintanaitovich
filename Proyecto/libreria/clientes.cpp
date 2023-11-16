@@ -4,13 +4,13 @@
 
 using namespace std;
 
-int buscar_idcliente (sClientes *cliente, unsigned int tamT, string nombre, string apellido, string email)
+int buscar_idcliente (sClientes *cliente, unsigned int tamT, string nombre, string apellido)
 {
     sClientes* actual = cliente;
     sClientes* Ultimo = cliente + tamT;
     while(actual != Ultimo)
     {
-        if(actual->nombre==nombre && actual->apellido==apellido && actual->email == email)//agrego el mail asi me aseguro bien que sea la eprsona correcta
+        if(actual->nombre==nombre && actual->apellido==apellido)//agrego el mail??
         {
             if(actual->estado<0){
                 return -1;
