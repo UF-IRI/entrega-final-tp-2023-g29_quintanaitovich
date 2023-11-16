@@ -13,9 +13,10 @@ eArchivos leerArchivoAsistencias (std::ifstream &archivo, sAsistencias *&asisten
 eArchivos leerArchivoClientes (std::ifstream &archivo, sClientes *&clientes, unsigned int &cant);
 eArchivos leerArchivoClases (std::ifstream &archivo, sClases*& clases, unsigned int &tamT);
 eArchivos escribirArchivoMañana(std::ofstream&archivo,sAsistencias*cliente_mañana, unsigned int cant_mañana);
+
 void resizeClases(sClases*&clases, unsigned int &tamanio);
 void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam);
 void resizeClientes (sClientes *& clientes, unsigned int &tamC);
-void resizeClienteMañana(sAsistencias*&asistencia_mañana, unsigned int&tamm, unsigned int nuevoTamm);
+void resizeClienteMañana(sAsistencias*&asistencia_mañana, unsigned int&tamm);
 
 #endif // ARCHIVOS_H

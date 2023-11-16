@@ -1,136 +1,182 @@
 #include "cliente.h"
+#include "clientes.cpp"
 #include "clasess.h"
+#include "archivos.h"
 #include <iostream>
 
 using namespace std;
 
-eReserva reservar_clase(sClientes* cliente, sClases* clases, sAsistencias*asistencia, string actividad, int horario, string nombre, string apellido)
+eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, unsigned int tamT,sAsistencias*asistencia,
+                        unsigned int tam, string actividad, float horario, string nombre, string apellido, string email )
 {
-    int i=0;
-    sClases clase_reserva;
-    //busco el id de la persona que quiere reservar
-    int ID =buscar_idcliente(cliente,nombre,apellido);
-    sClases *ultimo = clases + 59;
-    while(true) //se puede poner directamente 60?
-    {
-        //encuentro la clase que me pasaron en el archivo
-        if(clases[i].actividad==actividad && clases[i].horario==horario)
-        {
-            clase_reserva= clases[i]; //guardo en la variable la clase a reserva
-            break;
-        }
-        if(i==ultimo -> id) //no se encontro el horario
-            return eReserva::ErrorReserva;
-    }
+    int poscliente;
+    int IdClase = buscar_idclases(clases,tamT,actividad,horario);
+    unsigned int aux_cantins=0;
+    unsigned int n=0;
+    int*grupitos=new int[n];
 
-    int Reserva = TieneReserva (asistencia, clase_reserva.id, ID);
-    if(Reserva==-2 || Reserva==-1)
+    int idCliente = buscar_idcliente(cliente, cant,nombre,apellido,email);
+    if(idCliente == -1)
         return eReserva::ErrorReserva;
-    if(Reserva==1)
+
+    //recorro asistencias--> corto cuando el id coincide con el id del cliente--> guardo su cantinscriptos
+    //recorro las inscripciones del cliente(cant_inscrptos) y si ya tiene una clase en el mismo horario--> errorReserva
+    for(unsigned int i=0;i<tam;i++)
     {
-        if(!HayEspacio(asistencia,clase_reserva.id)==true)
+        if(asistencia[i].idCliente==idCliente)
         {
-            return eReserva::ErrorReserva;
+            aux_cantins=asistencia[i].cantInscriptos;
+            poscliente=i;
         }
-        else
-            return eReserva::ExitoReserva;
     }
-    //ver que si ya estoy inscripto --> si estoy inscripto me borro
-        // si me encontro una sola vez--> return exito reserva
-        //si me encontro dos veces--> borro la segunda (funcion borrar)
-        //si me encontro dos o mas--> borro odos menos el primero
-    //ver si hay espacio (funcion hay espacio)--> si hay y no estoy ya anotado me inscribo en el primer lugar libre
-    //si no hay lugar --> error reserva
+    for(unsigned int i=0;i<aux_cantins;i++)
+    {
+        AgruparPorHorarios(clases,tamT,grupitos,n,horario);
+        for(unsigned int j=0; j<n; j++)
+        {
+            if(asistencia[poscliente].Inscripcion[i].idClase==grupitos[j])
+                return eReserva::ErrorReserva; //ya tiene una reserva en ese horario
+        }
+    }
+    delete[]grupitos;
+    //una vez que hacemos la funcion de grupitos, tambien estamos viendo que el cliente no este dos veces en la misma clase
+
+    if(HayEspacio(asistencia,IdClase,tam)==true)
+    {
+        return eReserva::ExitoReserva;
+    }else
+        return eReserva::ErrorReserva;
 }
 
-bool HayEspacio (sAsistencias*asistencia, int idClase)
+bool HayEspacio (sAsistencias*asistencia, unsigned int idClase, int tam)
 {
     int i;
     int j;
     int cont=0;
-    for(i=0;i<250;i++)
+    for(i=0;i<tam;i++)
     {
-        for(j=0;j<60;j++)
+        for(j=0; j<asistencia[i].cantInscriptos; j++) //asistencia[i].cantInscriptos
         {
             if(asistencia[i].Inscripcion[j].idClase==idClase)
                 cont++;
         }
     }
     if(idClase>1 && idClase <6) //estas en spinning
-        {
+    {
         if(cont<=45)
             return true;
         else
             return false;
-        }
+    }
     if(idClase>5 && idClase <12) //estas en yoga
-        {
+    {
         if(cont<=25)
             return true;
         else
             return false;
-        }
+    }
     if(idClase>11 && idClase <19) //estas en pilates
-        {
+    {
         if(cont<=15)
             return true;
         else
             return false;
-        }
+    }
     if(idClase>18 && idClase <24) // streching
-        {
-            if(cont<=40)
-                return true;
-            else
-                return false;
-        }
+    {
+        if(cont<=40)
+            return true;
+        else
+            return false;
+    }
     if(idClase>23 && idClase <30) //zumba
-        {
-            if(cont<=50)
-                return true;
-            else
-                return false;
-        }
+    {
+        if(cont<=50)
+            return true;
+        else
+            return false;
+    }
     if(idClase>29 && idClase <34) // boxeo
-        {
-            if(cont<=30)
-                return true;
-            else
-                return false;
-        }
+    {
+        if(cont<=30)
+            return true;
+        else
+            return false;
+    }
     if(idClase>33 && idClase <61) // musculacion
-        {
-            if(cont<=30)
-                return true;
-            else
-                return false;
-        }
+    {
+        if(cont<=30)
+            return true;
+        else
+            return false;
+    }
+    return false;
 }
 
-eTieneReserva TieneReserva(sAsistencias*asistencia, int idClase, int idCliente)
+int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float horario)
 {
-        int i; int j; int r;
-        int cont=0;
-        for(i=0;i<250;i++) //recorro mis estructuras de asistencias
+    sClases* Actual = clases;
+    sClases* Ultimo = clases + tamT;
+    while(Actual != Ultimo)
+    {
+        if(Actual->actividad==actividad && Actual->horario==horario)
         {
-            if(asistencia[i].idCliente==idCliente)
-            {
-                for(j=0;j<60;j++) //recorro todas las inscripciones d clienelte
-                {
-                    if(asistencia[i].Inscripcion[j].idClase==idClase) //encuentro la primera que coincide con el id
-                    {
-                        for(r=j;r<60;r++) //vuelvo a recorrer las inscripciones desde la primera que encontre
-                        {
-                            if(asistencia[i].Inscripcion[r].idClase==idClase)//si coincide con el id, lo elimino
-                            asistencia[i].Inscripcion[r] = InscripcionNula;
-                        }
-                        cont++;
-                        return eTieneReserva::YaTieneLugar; //ya estaba en la clase
-                    }
-                }
-                if(cont==0) // no me encontro
-                return eTieneReserva::PuedeReservar; //no esta en la clase
-            }
+            return Actual->id;
         }
-        return eTieneReserva:: ErrId; //si llega a salir del for, no encontro el id
+        Actual++;
+    }
+    return -1;
+    //cuando llamo a la funcion aclarar que -1 es error.
 }
+
+void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario)
+{
+    //recorrer las clases y buscar todas las que coincida el horario con horario
+    for(int i=0; i<tamT; i++)
+    {
+        if(clases[i].horario==horario)
+        {
+            unsigned int aux=n+1;
+            ResizeGrupitos(grupitos,n,aux);
+            grupitos[n]=clases[i].id;
+            n++;
+        }
+    }
+    return;
+}
+
+void ResizeGrupitos(int*& grupitos, unsigned int &n, unsigned int nuevaN)
+{
+    if(grupitos==nullptr)
+    {
+        if(n<=0)
+        {
+            grupitos= new int[nuevaN];
+        }
+        return;
+    }
+    int*aux=new int[nuevaN];
+    for(unsigned int i=0; i<n;i++)
+    {
+        aux[i]=grupitos[i];
+    }
+    delete[]grupitos;
+    grupitos=aux;
+}
+
+void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, string &apellidito, string &emailcito,
+                   string &actividadd, float &horarioo)
+{
+    int num_cliente=rand()%(sizeof(clientes));
+    nombrecito=clientes[num_cliente].nombre;
+    apellidito=clientes[num_cliente].nombre;
+    emailcito=clientes[num_cliente].nombre;
+
+    int num_clase=rand()%(sizeof(clases));
+    actividadd=clases[num_clase].actividad;
+    horarioo=clases[num_clase].horario;
+
+    return;
+}
+
+

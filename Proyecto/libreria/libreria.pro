@@ -9,8 +9,8 @@ CONFIG += c++17
 
 SOURCES += \
     archivos.cpp \
-    clasess.cpp \
-    cliente.cpp \
+    clases.cpp \
+    clientes.cpp \
     libreria.cpp
 
 HEADERS += \

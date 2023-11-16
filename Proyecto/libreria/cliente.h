@@ -3,15 +3,9 @@
 
 #include <string.h>
 #include <iostream>
-#include "clases.h"
+
 
 using namespace std;
-
-/*struct fecha
-{
-    int dia,mes,anyo;
-};
-typedef struct fecha sFecha;*/
 
 struct cliente
 {
@@ -29,7 +23,7 @@ typedef struct cliente sClientes;
 struct inscripcion
 {
     int idClase;
-    int fechaInscripcion; //como se declara si es un timestamp
+    time_t fechaInscripcion;
 };
 typedef struct inscripcion sInscripcion;
 
@@ -44,7 +38,6 @@ typedef struct asistencia sAsistencias;
 
 const sInscripcion InscripcionNula = { 0 , 0 };
 
-int buscar_idcliente(sClientes *cliente, unsigned int cant, string nombre, string apellido);
-
+int buscar_idcliente (sClientes *cliente,unsigned int tamT, string nombre, string apellido, string email);
 
 #endif // CLIENTE_H

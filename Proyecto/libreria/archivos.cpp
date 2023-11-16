@@ -1,5 +1,5 @@
 #include "cliente.h"
-#include "clasess.h"
+#include "clases.h"
 #include "archivos.h"
 
 #include <string.h>
@@ -70,7 +70,7 @@ eArchivos leerArchivoClientes (std::ifstream &archivo, sClientes *&clientes, uns
     string linea;
     stringstream ss(linea);
     string auxid, auxnombre, auxapellido, auxemail, auxtelefono,auxFechaNac, auxestado;
-    unsigned int cant_actual=cant;
+    //unsigned int cant_actual=cant;
 
     getline(archivo, linea); //descarto la linea del encabezado
 
@@ -86,21 +86,18 @@ eArchivos leerArchivoClientes (std::ifstream &archivo, sClientes *&clientes, uns
         getline(ss,auxFechaNac,delimitador);
         getline(ss,auxestado,delimitador);
 
-        if(cant_actual >= cant) //lo hago asi para no hacer tantos resize
-            resizeClientes(clientes, cant);
+        //if(cant_actual >= cant) //lo hago asi para no hacer tantos resize
+        resizeClientes(clientes, cant);
 
-        clientes[cant_actual-1].id= stoi (auxid);
-        clientes[cant_actual-1].nombre=auxnombre;
-        clientes[cant_actual-1].apellido=auxapellido;
-        clientes[cant_actual-1].email=auxemail;
-        clientes[cant_actual-1].telefono=auxtelefono;
+        clientes[cant-1].id= stoi (auxid);
+        clientes[cant-1].nombre=auxnombre;
+        clientes[cant-1].apellido=auxapellido;
+        clientes[cant-1].email=auxemail;
+        clientes[cant-1].telefono=auxtelefono;
         //como hago para leerlo si es time_t?
-        clientes[cant_actual-1].fecha= auxFechaNac;
-        clientes[cant_actual-1].estado= stoi (auxestado);
-
-        cant_actual++;
+        clientes[cant-1].fecha= auxFechaNac;
+        clientes[cant-1].estado= stoi (auxestado);
     }
-    cant=cant_actual;
     return eArchivos::ExitoOperacion;
 }
 
@@ -116,7 +113,7 @@ eArchivos leerArchivoClases (std::ifstream &archivo, sClases *& clases, unsigned
     stringstream s; //revisar si es asi el nombre
     string snombre, shorario, sidclase;
     //int sidclase, shorario;
-    unsigned int tamactual= tamT;
+    //unsigned int tamactual= tamT;
 
     getline(archivo,linea);
 
@@ -129,18 +126,16 @@ eArchivos leerArchivoClases (std::ifstream &archivo, sClases *& clases, unsigned
         getline (s,snombre,delimiter);
         getline(s,shorario,delimiter);
 
-        if (tamactual >=tamT)
+        // if (tamactual >=tamT)
 
         resizeClases(clases,tamT);
 
         //ver la conversion de string a int
-        clases[tamactual-1].id=  std::stoi(sidclase);
-        clases[tamactual-1].actividad=snombre;
-        clases[tamactual-1].horario= std::stoi(shorario);
-        tamactual++;
+        clases[tamT-1].id=  std::stoi(sidclase);
+        clases[tamT-1].actividad=snombre;
+        clases[tamT-1].horario= std::stof(shorario);
     }
 
-    tamT=tamactual;
     return ExitoOperacion;
 }
 
@@ -167,16 +162,15 @@ void resizeClases(sClases*&clases, unsigned int &tamanio)
     if(clases==nullptr)
     {
         if(tamanio<=0)
-            clases=new sClases [tamanio++];
+            clases=new sClases [++tamanio];
         return;
     }
-    sClases* aux= new sClases[tamanio++]; // mi aux donde copio las clases lo hago del nuevo tamanio
+    sClases* aux= new sClases[++tamanio]; // mi aux donde copio las clases lo hago del nuevo tamanio
 
     for(unsigned int i=0; i<tamanio;i++)
     {
         aux[i]= clases[i]; // copio las clases en mi vector auxiliar
     }
-
     delete[]clases; //borro asi libero memoria
     clases=aux; //copio mi axiliar en clases
 }
@@ -185,10 +179,10 @@ void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam)
     if(asistencia==nullptr)
     {
         if(tam<=0)
-            asistencia= new sAsistencias[tam++];
+            asistencia= new sAsistencias[++tam];
     return;
     }
-    sAsistencias*aux=new sAsistencias[tam++];
+    sAsistencias*aux=new sAsistencias[++tam];
     for(int i=0; i< tam; i++)
     {
         aux[i]= asistencia[i];
@@ -203,11 +197,11 @@ void resizeClientes (sClientes *& clientes, unsigned int &tamC)
     {
         if(tamC<=0)
         {
-            clientes= new cliente[tamC++]; //si no tenia espacio --> le agrego espacio directamente a clientes
+            clientes= new cliente[++tamC]; //si no tenia espacio --> le agrego espacio directamente a clientes
         }
         return;
     }
-    sClientes*aux= new sClientes[tamC++]; //si no es la primera vez, creo nuevo vector
+    sClientes*aux= new sClientes[++tamC]; //si no es la primera vez, creo nuevo vector
 
     for(unsigned int i=0; i< tamC; i++)
     {
@@ -223,10 +217,10 @@ void resizeClienteMañana(sAsistencias*& asistencia_mañana, unsigned int &tamm)
     if(asistencia_mañana==nullptr)
     {
         if(tamm<=0)
-            asistencia_mañana=new sAsistencias[tamm++];
+            asistencia_mañana=new sAsistencias[++tamm];
         return;
     }
-    sAsistencias*aux=new sAsistencias[tamm++];
+    sAsistencias*aux=new sAsistencias[++tamm];
 
     for(unsigned int i=0; i<tamm; i++)
     {
@@ -235,3 +229,4 @@ void resizeClienteMañana(sAsistencias*& asistencia_mañana, unsigned int &tamm)
     delete[]asistencia_mañana;
     asistencia_mañana=aux;
 }
+

@@ -1,6 +1,62 @@
 #include <catch2/catch.hpp>
+#include "clasess.h"
+#include "cliente.h"
+#include "clases.cpp"
 
-TEST_CASE("My first test with Catch2", "[fancy]")
+int buscar_idcliente_test(sClientes* misClientes, unsigned int tamT, string nombre, string apellido, string email) {
+    return buscar_idcliente(misClientes, tamT, nombre, apellido, email);
+}
+sClientes Clientes[3]={
+    {1,"Agusti­n","Guerra","Agusti­nGuerra@bolandia.iri","462-185-1730","10-12-1966",0},
+        {11,"Celeste","Ortega","CelesteOrtega@bolandia.iri","414-820-0908","12-08-1992",-2480},
+        {26,"Daniela","Cortez","DanielaCortez@bolandia.iri","995-806-6312","27-02-1965",423}
+    };
+sClases Clases[5]={
+    {5,"Spinning",18},{6,"Yoga",9},{26,"Zumba",12},{3,"Spinning",12},{16,"Pilates",18}
+            };
+
+TEST_CASE("buscar idCiente")
 {
-    REQUIRE(0 == 0);
+    unsigned int tam_test=3;
+    sClientes*misClientes= Clientes; //apunta a la primera pos (agustin guerra)
+    REQUIRE(misClientes != nullptr);
+    int idNuevo1= buscar_idcliente_test(misClientes,tam_test,"Celeste","Ortega","CelesteOrtega@bolandia.iri");
+    REQUIRE(idNuevo1==-1); //porque tiene estado negativo
+
+    //int idNuevo2= buscar_idcliente(misClientes,tam_test,"Agustin","Guerra","AgustinGuerra@bolandia.iri");
+    //REQUIRE(idNuevo2==1); //me devuelve el id
+
+    delete[]misClientes;
+}
+
+TEST_CASE("buscar idClase")
+{
+    unsigned int tamClases=3;
+    sClases*misClases = Clases;
+    REQUIRE(misClases!= nullptr);
+    int idc1=buscar_idclases(misClases,tamClases,"yoga", 9);
+    REQUIRE(idc1==6);
+
+    //int idc2=buscar_idclases(misClases,tamClases, "stretching", 13);
+    //REQUIRE (idc2==-1);
+
+    delete[]misClases;
+}
+
+TEST_CASE ("AgruparPorHorarios")
+{
+    //grupitos es un vector que tiene ids adentro
+    sClases*misClases=Clases;
+    REQUIRE(misClases != nullptr);
+    unsigned int n=2;
+    float horario=12;
+    int*grupitos=new int[n];
+    AgruparPorHorarios(misClases,5 , grupitos, n, horario );
+    //hacer test para el resize grupitos !!!
+    REQUIRE (grupitos[0]==26);
+    REQUIRE(grupitos[1]==3);
+
+    delete[]grupitos;
+
+
 }

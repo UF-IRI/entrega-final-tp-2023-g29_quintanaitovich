@@ -5,25 +5,24 @@
 
 using namespace std;
 
-eReserva reservar_clase(sClientes* cliente, sClases* clases, sAsistencias*asistencia, string actividad, unsigned int horario,
-                        string nombre, string apellido, unsigned int tamT, unsigned int cant, unsigned int tam)
+eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, unsigned int tamT, sAsistencias*asistencia, unsigned int tam,
+    string actividad, float horario, string nombre, string apellido, string email)
 {
-    int i=0;
-    //busco el id de la persona que quiere reservar
-    unsigned int IdCliente =buscar_idcliente (cliente, cant, nombre,apellido);
-    if(IdCliente==-1)
-        return eReserva::ErrorReserva;
-    unsigned int IdClase = buscar_idclases(clases, tamT, actividad, horario);
+    int poscliente;
+    int IdClase = buscar_idclases(clases,tamT,actividad,horario);
     unsigned int aux_cantins=0;
-    unsigned int poscliente=0;
     unsigned int n=0;
     int*grupitos=new int[n];
+
+    int idCliente = buscar_idcliente(cliente, cant, nombre, apellido, email);
+    if(idCliente == -1)
+        return eReserva::ErrorReserva;
 
     //recorro asistencias--> corto cuando el id coincide con el id del cliente--> guardo su cantinscriptos
     //recorro las inscripciones del cliente(cant_inscrptos) y si ya tiene una clase en el mismo horario--> errorReserva
     for(unsigned int i=0;i<tam;i++)
     {
-        if(asistencia[i].idCliente==IdCliente)
+        if(asistencia[i].idCliente==idCliente)
         {
             aux_cantins=asistencia[i].cantInscriptos;
             poscliente=i;
@@ -110,11 +109,11 @@ bool HayEspacio (sAsistencias*asistencia, unsigned int idClase, int tam)
             else
                 return false;
         }
+    return false;
 }
 
-int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, int horario)
+int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float horario)
 {
-        int i=0;
         sClases* Actual = clases;
         sClases* Ultimo = clases + tamT;
         while(Actual != Ultimo)
@@ -130,7 +129,7 @@ int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, int ho
 }
 
 
-void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, unsigned int horario)
+void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario)
 {
         //recorrer las clases y buscar todas las que coincida el horario con horario
         for(int i=0; i<tamT; i++)
@@ -164,4 +163,20 @@ void ResizeGrupitos(int*& grupitos, unsigned int &n, unsigned int nuevaN)
         delete[]grupitos;
         grupitos=aux;
 }
+
+void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, string &apellidito, string &emailcito,
+                   string &actividadd, float &horarioo)
+{
+        int num_cliente=rand()%(sizeof(clientes));
+        nombrecito=clientes[num_cliente].nombre;
+        apellidito=clientes[num_cliente].nombre;
+        emailcito=clientes[num_cliente].nombre;
+
+        int num_clase=rand()%(sizeof(clases));
+        actividadd=clases[num_clase].actividad;
+        horarioo=clases[num_clase].horario;
+
+        return;
+}
+
 

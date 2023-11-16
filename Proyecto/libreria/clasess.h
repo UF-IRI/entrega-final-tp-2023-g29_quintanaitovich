@@ -11,23 +11,20 @@ struct clases
 {
     int id;
     std:: string actividad;
-    int horario;
+    float horario;
 };
 typedef struct clases sClases;
 
 enum Reserva {ErrorReserva=-1, ExitoReserva=1};
 typedef enum Reserva eReserva;
 
-eReserva reservar_clase(sClientes*cliente, sClases*clases,int id,std::string actividad,int horario, string nombre,
-                        string apellido, int tamT, int cant);
+eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, unsigned int tamT,sAsistencias*asistencia,
+          unsigned int tam, string actividad, float horario, string nombre, string apellido, string email );
 bool HayEspacio (sAsistencias*asistencia, unsigned int idClase, int tam);
-int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, int horario);
-void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, int unsigned horario);
+int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float horario);
+void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario);
 void ResizeGrupitos(int *& grupitos, unsigned int &N, unsigned int nuevaN);
+void clienteRandom (sClientes*clientes, sClases* clase, string &nombrecito, string &apellidito, string &emailcito, string &actividadd, float &horarioo);
 
-enum eTieneReserva { PuedeReservar = 1, YaTieneLugar = -1, ErrId=-2 };
-typedef enum eTieneReserva eTieneReserva;
-
-eTieneReserva TieneReserva(sAsistencias*asistencia,int idClase, int idCliente);
 
 #endif // CLASESS_H
