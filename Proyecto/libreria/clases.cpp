@@ -13,7 +13,7 @@ eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, 
     int IdClase = buscar_idclases(clases,tamT,actividad,horario);
     unsigned int aux_cantins=0;
     unsigned int n=0;
-    int*grupitos=new int[n];
+    int*grupitos=nullptr;
 
     int idCliente = buscar_idcliente(cliente, cant,nombre,apellido,email);
     if(idCliente == -1)
@@ -136,27 +136,25 @@ void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n
     {
         if(clases[i].horario==horario)
         {
-            unsigned int aux=n+1;
-            ResizeGrupitos(grupitos,n,aux);
-            grupitos[n]=clases[i].id;
-            n++;
+            ResizeGrupitos(grupitos,n);
+            grupitos[n-1]=clases[i].id;
         }
     }
     return;
 }
 
-void ResizeGrupitos(int*& grupitos, unsigned int &n, unsigned int nuevaN)
+void ResizeGrupitos(int*& grupitos, unsigned int &N)
 {
     if(grupitos==nullptr)
     {
-        if(n<=0)
+        if(N<=0)
         {
-            grupitos= new int[nuevaN];
+            grupitos= new int[++N];
         }
         return;
     }
-    int*aux=new int[nuevaN];
-    for(unsigned int i=0; i<n;i++)
+    int*aux=new int[++N];
+    for(unsigned int i=0; i<N-1 ;i++)
     {
         aux[i]=grupitos[i];
     }

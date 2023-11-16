@@ -126,11 +126,8 @@ eArchivos leerArchivoClases (std::ifstream &archivo, sClases *& clases, unsigned
         getline (s,snombre,delimiter);
         getline(s,shorario,delimiter);
 
-        // if (tamactual >=tamT)
-
         resizeClases(clases,tamT);
 
-        //ver la conversion de string a int
         clases[tamT-1].id=  std::stoi(sidclase);
         clases[tamT-1].actividad=snombre;
         clases[tamT-1].horario= std::stof(shorario);
@@ -166,14 +163,14 @@ void resizeClases(sClases*&clases, unsigned int &tamanio)
         return;
     }
     sClases* aux= new sClases[++tamanio]; // mi aux donde copio las clases lo hago del nuevo tamanio
-
-    for(unsigned int i=0; i<tamanio;i++)
+    for(unsigned int i=0; i<tamanio-1;i++)
     {
         aux[i]= clases[i]; // copio las clases en mi vector auxiliar
     }
     delete[]clases; //borro asi libero memoria
     clases=aux; //copio mi axiliar en clases
 }
+
 void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam)
 {
     if(asistencia==nullptr)
@@ -183,7 +180,7 @@ void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam)
     return;
     }
     sAsistencias*aux=new sAsistencias[++tam];
-    for(int i=0; i< tam; i++)
+    for(unsigned int i=0; i< tam-1; i++)
     {
         aux[i]= asistencia[i];
     }
@@ -203,7 +200,7 @@ void resizeClientes (sClientes *& clientes, unsigned int &tamC)
     }
     sClientes*aux= new sClientes[++tamC]; //si no es la primera vez, creo nuevo vector
 
-    for(unsigned int i=0; i< tamC; i++)
+    for(unsigned int i=0; i< tamC-1; i++)
     {
         aux[i]= clientes[i]; //copio dato pot dato (struct por struct)
     }
@@ -222,7 +219,7 @@ void resizeClienteMañana(sAsistencias*& asistencia_mañana, unsigned int &tamm)
     }
     sAsistencias*aux=new sAsistencias[++tamm];
 
-    for(unsigned int i=0; i<tamm; i++)
+    for(unsigned int i=0; i<tamm-1; i++)
     {
         aux[i]=asistencia_mañana[i];
     }

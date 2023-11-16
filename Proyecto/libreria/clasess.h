@@ -23,7 +23,7 @@ eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, 
 bool HayEspacio (sAsistencias*asistencia, unsigned int idClase, int tam);
 int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float horario);
 void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario);
-void ResizeGrupitos(int *& grupitos, unsigned int &N, unsigned int nuevaN);
+void ResizeGrupitos(int *& grupitos, unsigned int &N);
 void clienteRandom (sClientes*clientes, sClases* clase, string &nombrecito, string &apellidito, string &emailcito, string &actividadd, float &horarioo);
 
 

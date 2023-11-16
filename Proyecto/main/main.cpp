@@ -11,7 +11,7 @@ int main()
     ifstream archivoClases;
     archivoClases.open("iriClasesGYM.csv");
     unsigned int tamT=0;
-    sClases*ClasesGYM= new sClases[tamT];
+    sClases*ClasesGYM= nullptr;
     int result1=leerArchivoClases(archivoClases, ClasesGYM, tamT);
     if(result1<0)
         cout<<"No se pudo leer el archivo de Clases"<<endl;

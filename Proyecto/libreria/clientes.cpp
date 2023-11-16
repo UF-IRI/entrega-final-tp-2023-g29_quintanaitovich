@@ -10,10 +10,11 @@ int buscar_idcliente (sClientes *cliente, unsigned int tamT, string nombre, stri
     sClientes* Ultimo = cliente + tamT;
     while(actual != Ultimo)
     {
-        if(actual->nombre==nombre && actual->apellido==apellido && actual->email==email)//agrego el mail asi me aseguro bien que sea la eprsona correcta
+        if(actual->nombre==nombre && actual->apellido==apellido && actual->email == email)//agrego el mail asi me aseguro bien que sea la eprsona correcta
         {
-            if(actual->estado<0)
-            {return -1;}
+            if(actual->estado<0){
+                return -1;
+            }
 
             return actual->id;
         }
