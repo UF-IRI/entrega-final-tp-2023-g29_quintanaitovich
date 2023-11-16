@@ -25,6 +25,6 @@ int buscar_idclases(sClases *clases, unsigned int tamT, string actividad, float 
 void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n, float horario);
 void ResizeGrupitos(int *& grupitos, unsigned int &N);
 void clienteRandom (sClientes*clientes, sClases* clase, string &nombrecito, string &apellidito, string &actividadd, float &horarioo);
-
+void ResizeInscripciones(sInscripcion*&inscripciones,int &num_clases);
 
 #endif // CLASESS_H

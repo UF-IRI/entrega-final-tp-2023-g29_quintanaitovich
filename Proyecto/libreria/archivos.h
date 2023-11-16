@@ -17,6 +17,6 @@ eArchivos escribirArchivoMañana(std::ofstream&archivo,sAsistencias*cliente_mañ
 void resizeClases(sClases*&clases, unsigned int &tamanio);
 void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam);
 void resizeClientes (sClientes *& clientes, unsigned int &tamC);
-void resizeClienteMañana(sAsistencias*&asistencia_mañana, unsigned int&tamm);
+void resizeClienteMañana(sAsistencias *& asistencia_mañana, unsigned int&tamm);
 
 #endif // ARCHIVOS_H

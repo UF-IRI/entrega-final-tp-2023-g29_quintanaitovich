@@ -57,12 +57,10 @@ int main()
         {
             while(j<i) //recorro la cantidad de asistencias que tengo por ahora
             {
-                if(asistenciasMañana[j].idCliente== idclienteR)
+                if(asistenciasMañana[j].idCliente== idclienteR) // el cliente y tiene alguna inscripcion
                 {
-                    //resize de las inscripciones del cliente para sumarle un lugar y poder agregarle la clase
-                    //crearme un vector dinamico de tipo inscripcion con 0 lugares
                     int cantidad= (asistenciasMañana[j].cantInscriptos)++;
-                    //asistenciasMañana[j].cantInscriptos= cantidad;
+                    ResizeInscripciones(asistenciasMañana[j].Inscripcion , asistenciasMañana[j].cantInscriptos);
                     asistenciasMañana[j].Inscripcion[cantidad] = {idclaseR, time(NULL)};
                 }
                 else
@@ -77,7 +75,7 @@ int main()
     }
 
     ofstream archivoMañana;
-    archivoMañana.open("AsistenciasMañana.bin",ios::binary);
+    archivoMañana.open("AsistenciaMañana.dat",ios::binary);
     int result4 = escribirArchivoMañana(archivoMañana,asistenciasMañana,CantidadClientesHoy);
     if(result4<0)
         cout<<"No se pudo escribir el archivo de mañana";

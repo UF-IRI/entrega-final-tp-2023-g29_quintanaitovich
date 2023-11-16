@@ -93,4 +93,8 @@ TEST_CASE("Archivos")
 
         delete[]clases;
     }
+    SECTION("LeerArchivoAyer")
+    {
+
+    }
 }

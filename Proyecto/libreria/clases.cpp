@@ -177,4 +177,21 @@ void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, stri
     return;
 }
 
+void ResizeInscripciones(sInscripcion*&inscripciones,int &num_clases)
+{
+    if(inscripciones==nullptr)
+    {
+        if(num_clases<0)
+        {
+            inscripciones=new sInscripcion[++num_clases];
+        }
+    }
+    sInscripcion*aux=new sInscripcion[++num_clases];
+    for(unsigned int i=0;i<num_clases-1;i++)
+    {
+        aux[i]=inscripciones[i];
+    }
+    delete[]inscripciones;
+    inscripciones=aux;
+}
 
