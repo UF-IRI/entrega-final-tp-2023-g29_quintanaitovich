@@ -32,7 +32,7 @@ struct asistencia
 {
     int idCliente;
     int cantInscriptos;
-    sInscripcion *Inscripcion=new sInscripcion[cantInscriptos];
+    sInscripcion *Inscripcion;
 };
 typedef struct asistencia sAsistencias;
 

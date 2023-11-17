@@ -4,6 +4,7 @@
 #include "cliente.h"
 #include "archivos.cpp"
 #include "clases.cpp"
+#include <ctime>
 
 int main()
 {
@@ -30,7 +31,7 @@ int main()
     ifstream archivoAsistenciasAyer;
     archivoAsistenciasAyer.open("asistencias_1697673600000.dat", ios::binary);
     unsigned int tam=0;
-    sAsistencias*asistenciasAyer=new sAsistencias[tam];
+    sAsistencias*asistenciasAyer = new sAsistencias[tam];
     int result3=leerArchivoAsistencias(archivoAsistenciasAyer, asistenciasAyer, tam);
     if(result3<0)
         cout<<"Ocurrio un error leyendo mis clases para hoy";
@@ -38,23 +39,29 @@ int main()
 
     //hago el random de mi lista de clientes [una posicion]
     //hago un random que me diga la cantidad de clientes que se van a anotar hoy
-    int CantidadClientesHoy= rand()%(cant);
+    int CantidadClientesMañana= rand()%(cant);
     string nombrecito=" ", apellidito=" ", actividadd=" ";
     float horarioo=0.0;
-    sAsistencias*asistenciasMañana= new sAsistencias[CantidadClientesHoy];
+    sAsistencias*asistenciasMañana= new sAsistencias[CantidadClientesMañana];
+    for(unsigned int k=0; k<CantidadClientesMañana;k++)
+    {
+        asistenciasMañana[k].idCliente=0;
+    }
     int Reserva=0;
     unsigned int i=0;
+    unsigned int tamMañana=0;
 
-    while(i<CantidadClientesHoy)
+    while(i<CantidadClientesMañana)
     {
         unsigned int j=0;
         clienteRandom (ClientesGYM, ClasesGYM, nombrecito, apellidito, actividadd, horarioo);
-        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tam, actividadd, horarioo, nombrecito, apellidito);
+        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tamMañana, actividadd, horarioo, nombrecito, apellidito);
         int idclaseR= buscar_idclases(ClasesGYM,tamT,actividadd,horarioo);
         int idclienteR=buscar_idcliente(ClientesGYM,cant,nombrecito,apellidito);
 
         if(Reserva>0)
         {
+            i++;
             while(j<i) //recorro la cantidad de asistencias que tengo por ahora
             {
                 if(asistenciasMañana[j].idCliente== idclienteR) // el cliente y tiene alguna inscripcion
@@ -65,18 +72,20 @@ int main()
                 }
                 else
                 {
-                    asistenciasMañana[j].Inscripcion[0]={idclaseR,timezone};
-                    asistenciasMañana[j].cantInscriptos+=1;
+                    asistenciasMañana[j].cantInscriptos += 1;
+                    asistenciasMañana[j].Inscripcion = new sInscripcion[1];
+                    asistenciasMañana[j].Inscripcion[0] = {idclaseR, time(nullptr)};
+
                 }
                 j++;
             }
         }
-        i++;
+        tamMañana++;
     }
 
     ofstream archivoMañana;
     archivoMañana.open("AsistenciaMañana.dat",ios::binary);
-    int result4 = escribirArchivoMañana(archivoMañana,asistenciasMañana,CantidadClientesHoy);
+    int result4 = escribirArchivoMañana(archivoMañana,asistenciasMañana,CantidadClientesMañana);
     if(result4<0)
         cout<<"No se pudo escribir el archivo de mañana";
     archivoMañana.close();
@@ -86,6 +95,10 @@ int main()
     delete[]ClientesGYM;
     delete[]asistenciasAyer;
     delete[]asistenciasMañana;
+    for (unsigned int k = 0; k < CantidadClientesMañana; k++)
+    {
+       delete[] asistenciasMañana[k].Inscripcion;
+    }
 
     return 0;
 }

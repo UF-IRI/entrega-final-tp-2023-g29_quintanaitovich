@@ -13,8 +13,9 @@ using namespace std;
 eArchivos leerArchivoAsistencias(std::ifstream &archivo, sAsistencias *&asistencias, unsigned int &tam) //tam es igual en la funcion que afuera
 {
     unsigned int id_aux;
-    unsigned int cant_ins_aux;
-    sAsistencias*asistencia = new sAsistencias[tam];
+    unsigned int cant_ins_aux=0; //tal vez no es asi
+    archivo.clear();
+    archivo.seekg(0);
 
     while(!archivo.eof())
     {
@@ -23,41 +24,21 @@ eArchivos leerArchivoAsistencias(std::ifstream &archivo, sAsistencias *&asistenc
         sInscripcion*inscripcion_aux= new sInscripcion[cant_ins_aux];
         //sInscripcion*inscripcion_aux = new sInscripcion [cant_ins_aux];
 
-        for(int i=0; i<cant_ins_aux; i++)
+        for(unsigned int i=0; i<cant_ins_aux; i++)
         {
             //levanto directamente la estructura de inscripcion
             archivo.read((char*)&inscripcion_aux[i],sizeof(inscripcion));
         }
-        //ver que esta persona no este en el archivo
-        bool personaExistente = false; //declaro como que no existe
-        int i=0;
-        if(tam>1)
-        {
-        while(i<(tam-1))
-        {
-            if (asistencia[i].idCliente == id_aux)
-            {
-                personaExistente = true;
-                break;
-            }
-            i++;
-        }
-        }
-        //veo que los cupos de las clases se respeten
 
-    if (!personaExistente)//si no esta, la copio en mi nuevo array sin los repetidos
-        {
-            // La persona no existe en el archivo, por lo que podemos agregarla al array y actualizar el tamaño
-            resizeAsistencia(asistencia, tam); //agrego memoria a medida que agrego clientes
-            asistencia[tam-1].idCliente=id_aux;
-            asistencia[tam-1].cantInscriptos=cant_ins_aux;
-            asistencia[tam-1].Inscripcion=inscripcion_aux;
-         } else // La persona ya existe en el archivo, por lo que no la agregamos y liberamos la memoria de inscripcion_aux
-            delete[] inscripcion_aux;
-        }
+        resizeAsistencia(asistencias, tam); //agrego memoria a medida que agrego clientes
+        asistencias[tam-1].idCliente=id_aux;
+        asistencias[tam-1].cantInscriptos=cant_ins_aux;
+        asistencias[tam-1].Inscripcion=inscripcion_aux;
 
-    delete[] asistencia; // Liberar la memoria original
-    asistencias=asistencia; //copia la lista sin repetidos
+        delete[] inscripcion_aux;
+    }
+
+    delete[] asistencias; // Liberar la memoria origina
     return eArchivos::ExitoOperacion;
 }
 
@@ -179,16 +160,16 @@ void resizeAsistencia (sAsistencias *& asistencia, unsigned int &tam)
     {
         if(tam<=0)
             asistencia = new sAsistencias[++tam];
-    return;
+        return;
     }
-    sAsistencias*aux=new sAsistencias[tam+1];
+    sAsistencias*aux=new sAsistencias[++tam];
+
     for(unsigned int i=0; i< tam-1; i++)
     {
         aux[i]= asistencia[i];
     }
     delete[]asistencia;
     asistencia=aux; //sAsistencias apunta al nuevo array
-    tam++;
 }
 
 void resizeClientes (sClientes *& clientes, unsigned int &tamC)

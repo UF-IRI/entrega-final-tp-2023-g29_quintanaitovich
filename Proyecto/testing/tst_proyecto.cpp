@@ -4,25 +4,33 @@
 #include "clases.cpp"
 #include "archivos.h"
 #include "archivos.cpp"
+#include <ctime>
 
 int buscar_idcliente_test(sClientes* misClientes, unsigned int tamT, string nombre, string apellido){
     return buscar_idcliente(misClientes, tamT, nombre, apellido);
 }
-sClientes Clientes[3]={
+sClientes Clientes[4]={
     {1,"Agusti­n","Guerra","Agusti­nGuerra@bolandia.iri","462-185-1730","10-12-1966",0},
         {11,"Celeste","Ortega","CelesteOrtega@bolandia.iri","414-820-0908","12-08-1992",-2480},
-        {26,"Daniela","Cortez","DanielaCortez@bolandia.iri","995-806-6312","27-02-1965",423}
+        {26,"Daniela","Cortez","DanielaCortez@bolandia.iri","995-806-6312","27-02-1965",423},
+        {10,"Gonzalo","Espinosa","GonzaloEspinosa@bolandia.iri","216-995-2329","29-12-1993",0}
     };
+
 sClases Clases[5]={
     {5,"Spinning",18},{6,"Yoga",9},{26,"Zumba",12},{3,"Spinning",12},
     {16,"Pilates",18} };
 
+time_t obtenerFechaHoraActual()
+{
+    return std::time(nullptr);
+}
+
+
 TEST_CASE("buscar_id", "[fancy]")
 {
-    unsigned int tamT_test=3;
+    unsigned int tamT_test=4;
     sClientes * micliente= Clientes;
     REQUIRE(micliente != nullptr);
-
     int idnuevo=buscar_idcliente(micliente,tamT_test,"Celeste", "Ortega");
     REQUIRE(idnuevo == -1);
 
@@ -62,6 +70,8 @@ TEST_CASE("Archivos")
     archivoClientes.open("iriClientesGYM.csv");
     ifstream archivoClases;
     archivoClases.open("iriClasesGYM.csv");
+    ifstream archivoAyer;
+    archivoAyer.open("asistencias_1697673600000.dat", ios::binary);
 
     SECTION("LeerArchivoClientes")
     {
@@ -91,10 +101,71 @@ TEST_CASE("Archivos")
         REQUIRE(clases[32].actividad=="Boxeo");
         REQUIRE(clases[32].horario==19);
 
-        delete[]clases;
     }
     SECTION("LeerArchivoAyer")
     {
-
+        sAsistencias*asistencias=nullptr;
+        unsigned int i=0;
+        int result=leerArchivoAsistencias(archivoAyer,asistencias,i);
+        REQUIRE(result==eArchivos::ExitoOperacion);
     }
 }
+TEST_CASE("Reservar clase")
+{
+    sClientes * micliente= Clientes; //tengo 4 declarados
+    sClases*misClases=Clases; //tengo 5 declaradas
+    sAsistencias asistencias[4]=
+    {
+        //agustin guerra
+        {1,3,new sInscripcion[3]{{5,obtenerFechaHoraActual()},{26,obtenerFechaHoraActual()},{16,obtenerFechaHoraActual()}}}, //tiene dos clases en el mismo horario--> error
+        //celeste ortega
+        {11,2,new sInscripcion[2]{{14,obtenerFechaHoraActual()},{19,obtenerFechaHoraActual()}}},
+        //daniela cortez
+        {26,4,new sInscripcion[4]{{1,obtenerFechaHoraActual()},{18,obtenerFechaHoraActual()},
+                 {14,obtenerFechaHoraActual()},{3,obtenerFechaHoraActual()}}}, // 1 y 18 son al mismo horario.
+        {10,2,new sInscripcion[2]{{1,obtenerFechaHoraActual()},{18,obtenerFechaHoraActual()}}}
+    };
+    //BoolHayEspacio (adentro de reservar clase) siempre va a dar true en estos casos
+    int result= reservar_clase(Clientes,4, Clases, 5, asistencias, 3, "Yoga", 9, "Agustin", "Guerra");
+    REQUIRE(result == eReserva::ErrorReserva); //dos clases el mismo horario
+
+    int result2= reservar_clase(Clientes,4, Clases, 5, asistencias,3, "Zumba", 12, "Daniela", "Cortez");
+    REQUIRE(result2 == eReserva::ErrorReserva); //dos clases el mismo horario
+
+    int result3= reservar_clase(Clientes,4, Clases, 5, asistencias,3, "Zumba", 12, "Celeste", "Ortega");
+    REQUIRE(result3 == eReserva::ErrorReserva);//tiene estado negativo
+
+    int result4= reservar_clase (Clientes,4,Clases,5,asistencias,3,"Yoga",9,"Gonzalo","Espinosa");
+    REQUIRE(result4== eReserva::ExitoReserva);
+}
+/*
+TEST_CASE("Resizes")
+{
+    SECTION ("Resize clientes")
+    {
+        // Crear un array de clientes inicializado con algunos valores
+        sClientes * misClientes= Clientes;
+        unsigned int tam = 4;
+
+        // Llamar a resizeClientes para agregar un nuevo cliente
+        resizeClientes(misClientes, tam);
+
+        // Verificar que el tamaño se haya incrementado
+        REQUIRE(tam == 5);
+    }
+        // Verificar que los datos antiguos se copiaron correctamente
+        REQUIRE(misClientes[0].id == 1);
+        REQUIRE(misClientes[0].nombre == "Agustin");
+        REQUIRE(misClientes[1].id == 11);
+        REQUIRE(misClientes[1].nombre == "Celeste");
+        REQUIRE(misClientes[2].id == 26);
+        REQUIRE(misClientes[2].nombre == "Daniela");
+        REQUIRE(misClientes[3].id==10);
+        REQUIRE(misClientes[3].nombre=="Gonzalo");
+
+        // Verificar que el nuevo espacio se haya inicializado correctamente
+        //REQUIRE(misClientes[4].id == 0); // Asumiendo que el valor predeterminado para el ID es 0
+        //REQUIRE(misClientes[4].nombre == " ");
+*/
+
+

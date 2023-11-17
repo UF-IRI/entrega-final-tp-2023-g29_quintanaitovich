@@ -7,41 +7,44 @@
 using namespace std;
 
 eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, unsigned int tamT,sAsistencias*asistencia,
-                        unsigned int tam, string actividad, float horario, string nombre, string apellido)
+                        unsigned int tamMañana, string actividad, float horario, string nombre, string apellido)
 {
-    int poscliente;
+    int poscliente=0;
     int IdClase = buscar_idclases(clases,tamT,actividad,horario);
     unsigned int aux_cantins=0;
     unsigned int n=0;
     int*grupitos=nullptr;
-
     int idCliente = buscar_idcliente(cliente, cant,nombre,apellido);
     if(idCliente == -1)
         return eReserva::ErrorReserva;
 
-    //recorro asistencias--> corto cuando el id coincide con el id del cliente--> guardo su cantinscriptos
-    //recorro las inscripciones del cliente(cant_inscrptos) y si ya tiene una clase en el mismo horario--> errorReserva
-    for(unsigned int i=0;i<tam;i++)
+    for(unsigned int i=0; i< tamMañana; i++)
     {
-        if(asistencia[i].idCliente==idCliente)
+        if(asistencia[i].idCliente==0)
         {
-            aux_cantins=asistencia[i].cantInscriptos;
-            poscliente=i;
+            aux_cantins=0;
         }
-    }
-    for(unsigned int i=0;i<aux_cantins;i++)
-    {
-        AgruparPorHorarios(clases,tamT,grupitos,n,horario);
-        for(unsigned int j=0; j<n; j++)
+        else
+        if(asistencia[i].idCliente==idCliente) //el cliente ya vino
+            {
+                aux_cantins=asistencia[i].cantInscriptos;
+                poscliente=i;
+            }
+        }
+        for(unsigned int i=0; i<aux_cantins; i++)
         {
-            if(asistencia[poscliente].Inscripcion[i].idClase==grupitos[j])
-                return eReserva::ErrorReserva; //ya tiene una reserva en ese horario
+            AgruparPorHorarios(clases,tamT,grupitos,n,horario);
+            for(unsigned int j=0; j<n; j++)
+            {
+                if(asistencia[poscliente].Inscripcion[i].idClase==grupitos[j])
+                  return eReserva::ErrorReserva; //ya tiene una reserva en ese horario
+            }
         }
-    }
+
     delete[]grupitos;
     //una vez que hacemos la funcion de grupitos, tambien estamos viendo que el cliente no este dos veces en la misma clase
 
-    if(HayEspacio(asistencia,IdClase,tam)==true)
+    if(HayEspacio(asistencia,IdClase,tamMañana)==true)
     {
         return eReserva::ExitoReserva;
     }else
@@ -167,7 +170,7 @@ void clienteRandom (sClientes*clientes, sClases*clases, string &nombrecito, stri
 {
     int num_cliente=rand()%(sizeof(clientes));
     nombrecito=clientes[num_cliente].nombre;
-    apellidito=clientes[num_cliente].nombre;
+    apellidito=clientes[num_cliente].apellido;
     //emailcito=clientes[num_cliente].nombre;
 
     int num_clase=rand()%(sizeof(clases));
