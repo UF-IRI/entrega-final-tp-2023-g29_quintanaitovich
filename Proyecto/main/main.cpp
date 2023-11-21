@@ -37,54 +37,19 @@ int main()
         cout<<"Ocurrio un error leyendo mis clases para hoy";
     archivoAsistenciasAyer.close();
 
-    //hago el random de mi lista de clientes [una posicion]
-    //hago un random que me diga la cantidad de clientes que se van a anotar hoy
     int CantidadClientesMañana= rand()%(cant);
-    string nombrecito=" ", apellidito=" ", actividadd=" ";
-    float horarioo=0.0;
     sAsistencias*asistenciasMañana= new sAsistencias[CantidadClientesMañana];
-    for(unsigned int k=0; k<CantidadClientesMañana;k++)
+    for(unsigned int k=0; k < CantidadClientesMañana; k++)
     {
         asistenciasMañana[k].idCliente=0;
+        asistenciasMañana[k].cantInscriptos=0;
     }
-    int Reserva=0;
-    unsigned int i=0;
-    unsigned int tamMañana=0;
 
-    while(i<CantidadClientesMañana)
-    {
-        unsigned int j=0;
-        clienteRandom (ClientesGYM, ClasesGYM, nombrecito, apellidito, actividadd, horarioo);
-        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tamMañana, actividadd, horarioo, nombrecito, apellidito);
-        int idclaseR= buscar_idclases(ClasesGYM,tamT,actividadd,horarioo);
-        int idclienteR=buscar_idcliente(ClientesGYM,cant,nombrecito,apellidito);
-
-        if(Reserva>0)
-        {
-            i++;
-            while(j<i) //recorro la cantidad de asistencias que tengo por ahora
-            {
-                if(asistenciasMañana[j].idCliente== idclienteR) // el cliente y tiene alguna inscripcion
-                {
-                    int cantidad= (asistenciasMañana[j].cantInscriptos)++;
-                    ResizeInscripciones(asistenciasMañana[j].Inscripcion , asistenciasMañana[j].cantInscriptos);
-                    asistenciasMañana[j].Inscripcion[cantidad] = {idclaseR, time(NULL)};
-                }
-                else
-                {
-                    asistenciasMañana[j].cantInscriptos += 1;
-                    asistenciasMañana[j].Inscripcion = new sInscripcion[1];
-                    asistenciasMañana[j].Inscripcion[0] = {idclaseR, time(nullptr)};
-
-                }
-                j++;
-            }
-        }
-        tamMañana++;
-    }
+    //asistenciasMañana llega con & y se cambia.
+    FuncionMain(ClasesGYM, cant, ClientesGYM, tamT, asistenciasMañana,CantidadClientesMañana);
 
     ofstream archivoMañana;
-    archivoMañana.open("AsistenciaMañana.dat",ios::binary);
+    archivoMañana.open("AsistenciaManiana.bin",ios::binary);
     int result4 = escribirArchivoMañana(archivoMañana,asistenciasMañana,CantidadClientesMañana);
     if(result4<0)
         cout<<"No se pudo escribir el archivo de mañana";
@@ -95,10 +60,6 @@ int main()
     delete[]ClientesGYM;
     delete[]asistenciasAyer;
     delete[]asistenciasMañana;
-    for (unsigned int k = 0; k < CantidadClientesMañana; k++)
-    {
-       delete[] asistenciasMañana[k].Inscripcion;
-    }
 
     return 0;
 }

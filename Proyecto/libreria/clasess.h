@@ -26,5 +26,7 @@ void AgruparPorHorarios(sClases*clases, int tamT, int*&grupitos, unsigned int &n
 void ResizeGrupitos(int *& grupitos, unsigned int &N);
 void clienteRandom (sClientes*clientes, sClases* clase, string &nombrecito, string &apellidito, string &actividadd, float &horarioo);
 void ResizeInscripciones(sInscripcion*&inscripciones,int &num_clases);
+void FuncionMain (sClases*ClasesGYM,unsigned int cant, sClientes*ClientesGYM, unsigned int tamT,
+                 sAsistencias*&asistenciasMañana, int CantidadClientesMañana);
 
 #endif // CLASESS_H

@@ -38,7 +38,7 @@ eArchivos leerArchivoAsistencias(std::ifstream &archivo, sAsistencias *&asistenc
         delete[] inscripcion_aux;
     }
 
-    delete[] asistencias; // Liberar la memoria origina
+    //delete[] asistencias; // Liberar la memoria origina
     return eArchivos::ExitoOperacion;
 }
 
@@ -122,7 +122,7 @@ eArchivos leerArchivoClases (std::ifstream &archivo, sClases *& clases, unsigned
 eArchivos escribirArchivoMañana(std::ofstream&archivo,sAsistencias*cliente_mañana, unsigned int cant_mañana)
 {
     //
-    if(archivo.is_open())
+    if(!archivo.is_open())
         return eArchivos::ErrorApertura;
 
     for(unsigned int i =0; i<cant_mañana; i++) //recorro el vector

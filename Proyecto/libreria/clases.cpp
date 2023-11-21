@@ -29,6 +29,7 @@ eReserva reservar_clase(sClientes* cliente, unsigned int cant, sClases* clases, 
             {
                 aux_cantins=asistencia[i].cantInscriptos;
                 poscliente=i;
+                break;
             }
         }
         for(unsigned int i=0; i<aux_cantins; i++)
@@ -186,10 +187,10 @@ void ResizeInscripciones(sInscripcion*&inscripciones,int &num_clases)
     {
         if(num_clases<0)
         {
-            inscripciones=new sInscripcion[++num_clases];
+            inscripciones=new sInscripcion[num_clases+1];
         }
     }
-    sInscripcion*aux=new sInscripcion[++num_clases];
+    sInscripcion*aux=new sInscripcion[num_clases+1];
     for(unsigned int i=0;i<num_clases-1;i++)
     {
         aux[i]=inscripciones[i];
@@ -198,3 +199,51 @@ void ResizeInscripciones(sInscripcion*&inscripciones,int &num_clases)
     inscripciones=aux;
 }
 
+void FuncionMain (sClases*ClasesGYM, unsigned int cant, sClientes*ClientesGYM, unsigned int tamT,
+                 sAsistencias*&asistenciasMañana, int CantidadClientesMañana)
+{
+    string nombrecito=" ", apellidito=" ", actividadd=" ";
+    float horarioo=0.0;
+    int Reserva=0;
+    unsigned int i=1;
+    unsigned int tamMañana=0;
+    unsigned int l=0;
+    unsigned int cont;
+
+    while(l<CantidadClientesMañana)
+    {
+        cont=0;
+        unsigned int j=0;
+        clienteRandom (ClientesGYM, ClasesGYM, nombrecito, apellidito, actividadd, horarioo);
+        Reserva = reservar_clase (ClientesGYM, cant, ClasesGYM, tamT, asistenciasMañana, tamMañana, actividadd, horarioo, nombrecito, apellidito);
+        int idclaseR= buscar_idclases(ClasesGYM,tamT,actividadd,horarioo);
+        int idclienteR=buscar_idcliente(ClientesGYM,cant,nombrecito,apellidito);
+
+        if(Reserva>0)
+        {
+            while(j<i) //recorro la cantidad de asistencias que tengo por ahora
+            {
+                if(asistenciasMañana[j].idCliente== idclienteR) // el cliente ya tiene alguna inscripcion
+                {
+                    int cantidad= (asistenciasMañana[j].cantInscriptos)++;
+                    ResizeInscripciones(asistenciasMañana[j].Inscripcion , asistenciasMañana[j].cantInscriptos);
+                    asistenciasMañana[j].Inscripcion[cantidad] = {idclaseR, time(NULL)};
+                    cont++;
+                }
+                j++; //si no me encontro sigue buscando
+            }
+
+            if(cont != 1) //no me encontre
+            {
+                asistenciasMañana[i-1].idCliente= idclienteR;
+                asistenciasMañana[i-1].cantInscriptos += 1;
+                asistenciasMañana[i-1].Inscripcion = new sInscripcion[1];
+                asistenciasMañana[i-1].Inscripcion[0] = {idclaseR, time(nullptr)};
+                i++;
+            }
+        }
+        l++;
+        tamMañana++;
+    }
+    return;
+}
