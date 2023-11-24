@@ -240,10 +240,11 @@ void FuncionMain (sClases*ClasesGYM, unsigned int cant, sClientes*ClientesGYM, u
                 asistenciasMañana[i-1].Inscripcion = new sInscripcion[1];
                 asistenciasMañana[i-1].Inscripcion[0] = {idclaseR, time(nullptr)};
                 i++;
+                tamMañana++;
             }
         }
         l++;
-        tamMañana++;
+        //tamMañana++;
     }
     return;
 }

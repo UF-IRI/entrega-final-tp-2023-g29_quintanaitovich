@@ -125,7 +125,7 @@ eArchivos escribirArchivoMañana(std::ofstream&archivo,sAsistencias*cliente_mañ
     if(!archivo.is_open())
         return eArchivos::ErrorApertura;
 
-    for(unsigned int i =0; i<cant_mañana; i++) //recorro el vector
+    for(unsigned int i=0; i<cant_mañana; i++) //recorro el vector
     {
         archivo.write((char*)&cliente_mañana[i].idCliente,sizeof(int));
         archivo.write((char*)&cliente_mañana[i].cantInscriptos,sizeof(unsigned int));

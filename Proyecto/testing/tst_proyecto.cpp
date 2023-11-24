@@ -72,6 +72,8 @@ TEST_CASE("Archivos")
     archivoClases.open("iriClasesGYM.csv");
     ifstream archivoAyer;
     archivoAyer.open("asistencias_1697673600000.dat", ios::binary);
+    ofstream archivoMañana;
+        archivoMañana.open("AsistenciaManiana.bin",ios::binary);
 
     SECTION("LeerArchivoClientes")
     {
@@ -109,6 +111,23 @@ TEST_CASE("Archivos")
         int result=leerArchivoAsistencias(archivoAyer,asistencias,i);
         REQUIRE(result==eArchivos::ExitoOperacion);
     }
+    SECTION("EscribirArchivoMañana")
+    {
+        sAsistencias asistencias[4]=
+            {
+                //agustin guerra
+                {1,3,new sInscripcion[3]{{5,obtenerFechaHoraActual()},{26,obtenerFechaHoraActual()},{16,obtenerFechaHoraActual()}}}, //tiene dos clases en el mismo horario--> error
+                //celeste ortega
+                {11,2,new sInscripcion[2]{{14,obtenerFechaHoraActual()},{19,obtenerFechaHoraActual()}}},
+                //daniela cortez
+                {26,4,new sInscripcion[4]{{1,obtenerFechaHoraActual()},{18,obtenerFechaHoraActual()},
+                                            {14,obtenerFechaHoraActual()},{3,obtenerFechaHoraActual()}}}, // 1 y 18 son al mismo horario.
+                {10,2,new sInscripcion[2]{{1,obtenerFechaHoraActual()},{18,obtenerFechaHoraActual()}}}
+            };
+        int result2= escribirArchivoMañana(archivoMañana,asistencias,4);
+        REQUIRE(result2==eArchivos::ExitoOperacion);
+    }
+
 }
 TEST_CASE("Reservar clase")
 {
@@ -138,34 +157,24 @@ TEST_CASE("Reservar clase")
     int result4= reservar_clase (Clientes,4,Clases,5,asistencias,3,"Yoga",9,"Gonzalo","Espinosa");
     REQUIRE(result4== eReserva::ExitoReserva);
 }
-/*
 TEST_CASE("Resizes")
 {
     SECTION ("Resize clientes")
     {
-        // Crear un array de clientes inicializado con algunos valores
-        sClientes * misClientes= Clientes;
-        unsigned int tam = 4;
+        sClientes* clientes1 = nullptr;
+        unsigned int tamC1 = 0;
+        resizeClientes(clientes1, tamC1);
+        REQUIRE(clientes1 != nullptr);
+        REQUIRE(tamC1 == 1);
 
-        // Llamar a resizeClientes para agregar un nuevo cliente
-        resizeClientes(misClientes, tam);
+        // clientes no es nullptr y tamC es 3
+        sClientes* clientes2 = new sClientes[3];
+        unsigned int tamC2 = 3;
 
-        // Verificar que el tamaño se haya incrementado
-        REQUIRE(tam == 5);
+        resizeClientes(clientes2, tamC2);
+        REQUIRE(tamC2 == 4);  // tamC se tiene que haber incrementado en 1
     }
-        // Verificar que los datos antiguos se copiaron correctamente
-        REQUIRE(misClientes[0].id == 1);
-        REQUIRE(misClientes[0].nombre == "Agustin");
-        REQUIRE(misClientes[1].id == 11);
-        REQUIRE(misClientes[1].nombre == "Celeste");
-        REQUIRE(misClientes[2].id == 26);
-        REQUIRE(misClientes[2].nombre == "Daniela");
-        REQUIRE(misClientes[3].id==10);
-        REQUIRE(misClientes[3].nombre=="Gonzalo");
+}
 
-        // Verificar que el nuevo espacio se haya inicializado correctamente
-        //REQUIRE(misClientes[4].id == 0); // Asumiendo que el valor predeterminado para el ID es 0
-        //REQUIRE(misClientes[4].nombre == " ");
-*/
 
 
